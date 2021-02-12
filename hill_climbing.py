@@ -1,7 +1,5 @@
 import numpy as np
-import random
 import copy
-
 
 def search(List, route):
     distance = 0
@@ -20,21 +18,6 @@ def swap1(List, route):
             Routes.append(tempRoute)
     return Routes
 
-"""
-def swap(route):
-    indexToSwap = []
-    newRoute = route
-    while len(indexToSwap) < 2:
-        randomIndex = np.random.randint(1, routeLength)
-        if randomIndex not in indexToSwap:
-            indexToSwap.append(randomIndex)
-    temp = newRoute[indexToSwap[0]]
-    newRoute[indexToSwap[0]] = newRoute[indexToSwap[1]]
-    newRoute[indexToSwap[1]] = temp
-    #print(indexToSwap) 
-    return newRoute
-"""
-
 with open("Search-Algorithms/european_cities.csv", "r") as file:
     cityNames = file.readline().split(";")
 
@@ -46,20 +29,15 @@ with open("Search-Algorithms/european_cities.csv", "r") as file:
             tempLine[i] = float(tempLine[i])
         List.append(tempLine)
 
-    for i in List:
-        print(i)
-    #print([i for i in List])
-    routeLength = len(List) 
+    routeLength = len(List) - 14
     randomRoute = [i for i in range(routeLength)]
-    random.shuffle(randomRoute)
-    #print("First: ", randomRoute)
+    np.random.shuffle(randomRoute)
 
     neighRoutes = swap1(List, randomRoute)
     routesDistance = [search(List, neighRoutes[i]) for i in range(len(neighRoutes))]
-    #print(routesDistance)
-    """
-    min_dis = min(distance)
-    Best = distance.index(min_dis)
-    P = bestRoute[Best]
-    """
-    #print( [cityNames[P[i]] for i in range(len(P))] )
+
+    min_dis = min(routesDistance)
+    Best = routesDistance.index(min_dis)
+    P = neighRoutes[Best]
+    
+    print( [cityNames[P[i]] for i in range(len(P))] )
