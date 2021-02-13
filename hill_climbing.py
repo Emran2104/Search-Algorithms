@@ -1,6 +1,7 @@
 import numpy as np
 import copy
 
+#Given a route, finds the distance of the route
 def search(List, route):
     distance = 0
     for i in range(1, len(route)):
@@ -18,7 +19,7 @@ def swap1(List, route):
             Routes.append(tempRoute)
     return Routes
 
-with open("Search-Algorithms/european_cities.csv", "r") as file:
+with open("european_cities.csv", "r") as file:
     cityNames = file.readline().split(";")
 
     List = []
@@ -29,7 +30,7 @@ with open("Search-Algorithms/european_cities.csv", "r") as file:
             tempLine[i] = float(tempLine[i])
         List.append(tempLine)
 
-    routeLength = len(List) - 14
+    routeLength = len(List) - 13
     randomRoute = [i for i in range(routeLength)]
     np.random.shuffle(randomRoute)
 
@@ -39,5 +40,17 @@ with open("Search-Algorithms/european_cities.csv", "r") as file:
     min_dis = min(routesDistance)
     Best = routesDistance.index(min_dis)
     P = neighRoutes[Best]
-    
+
+
+    for i in range(20):
+        neighRoutes = swap1(List, P)
+        routesDistance = [search(List, neighRoutes[i]) for i in range(len(neighRoutes))] 
+        min_dis = min(routesDistance)
+
+
+    #print(min_dis)
+
+    """
+    print(min_dis)
     print( [cityNames[P[i]] for i in range(len(P))] )
+    """
