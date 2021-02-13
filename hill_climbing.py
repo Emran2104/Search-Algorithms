@@ -1,5 +1,6 @@
 import numpy as np
 import copy
+from timeit import default_timer as timer
 
 #Given a route, finds the distance of the route
 def search(List, route):
@@ -22,7 +23,7 @@ def swap1(route):
 def execute():
     with open("european_cities.csv", "r") as file:
         cityNames = file.readline().split(";")
-
+        
         List = []
         for line in file:
             tempLine = line.split(";")
@@ -34,36 +35,58 @@ def execute():
         randomRoute = [i for i in range(routeLength)]
         np.random.shuffle(randomRoute)
 
-        #print(randomRoute)
-        first = search(List, randomRoute)
+        
+        distance = search(List, randomRoute)
         neighRoutes = swap1(randomRoute)
         routesDistance = [search(List, neighRoutes[i]) for i in range(len(neighRoutes))]
         
-        min_dis = min(routesDistance)
-        Best = routesDistance.index(min_dis)
-        P = neighRoutes[Best]
+        minDis = min(routesDistance)
+        tempIndex = routesDistance.index(minDis)
+        minRoute = neighRoutes[tempIndex]
 
-        while min_dis < first: 
-            first = min_dis 
-            neighRoutes = swap1(P)
+        while minDis < distance: 
+            distance = minDis 
+            neighRoutes = swap1(minRoute)
             routesDistance = [search(List, neighRoutes[i]) for i in range(len(neighRoutes))]
             
-            min_dis = min(routesDistance)
-            Best = routesDistance.index(min_dis)
-            P = neighRoutes[Best]
+            minDis = min(routesDistance)
+            tempIndex = routesDistance.index(minDis)
+            minRoute = neighRoutes[tempIndex]
 
-    return min_dis, [cityNames[P[i]] for i in range(len(P))]
+    #Best Outcome
+    #print(search(List, [4, 9, 20, 1, 5, 22, 23, 2, 17, 15, 13, 18, 0, 12, 7, 11, 16, 3, 8, 6, 21, 19, 14, 10]))
+
+    return minDis, [cityNames[minRoute[i]] for i in range(len(minRoute))]
 
 if __name__ == "__main__": 
     Distance = []
     Routes = []
+    start = timer()
 
     for i in range(20):
-        min_dis, route = execute()
-        Distance.append(min_dis)
+        minDistance, route = execute()
+        Distance.append(minDistance)
         Routes.append(route)
     
-    min_dis = min(Distance)
-    T = Distance.index(min_dis)
-    P = Routes[T]
-    print(min_dis, P)
+    minimumDistance = min(Distance)
+    tempIndexMin = Distance.index(minimumDistance)
+    minRoute = Routes[tempIndexMin]
+
+    maximumDistance = max(Distance)
+    tempIndexMax = Distance.index(maximumDistance)
+    maxRoute = Routes[tempIndexMax]
+
+    end = timer()
+    print("Minimum Route:", minRoute)
+    print(" Min Distance:", minimumDistance)
+    print("Maximum Route:", maxRoute)
+    print(" Max Distance:", maximumDistance)
+    print("Execute time:", end-start)
+
+    """
+    Minimum Route: ['London', 'Paris', 'Brussels', 'Hamburg', 'Copenhagen', 'Stockholm', 
+                    'Saint Petersburg', 'Moscow', 'Kiev', 'Bucharest', 'Istanbul', 'Sofia', 
+                    'Belgrade', 'Budapest', 'Vienna', 'Warsaw', 'Berlin', 'Prague', 
+                    'Munich', 'Milan', 'Rome', 'Barcelona', 'Madrid', 'Dublin']
+    Min Distance: 12287.07
+    """
