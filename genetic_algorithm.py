@@ -25,6 +25,7 @@ def crossover(parent1, parent2):
     c1 = parent1[start:end]
     c2 = parent2[start:end]
     
+    
     for i in range(half):
         bIdx = parent2.index(c1[i])
         parent2 = swap(parent2, i+start, bIdx)
