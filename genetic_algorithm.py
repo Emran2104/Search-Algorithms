@@ -21,28 +21,27 @@ def crossover(parent1, parent2):
     half = len(parent1) // 2
     start = np.random.randint(0, len(parent1)-half)
     end = start + half
-
+    child1 = parent1.copy()
+    child2 = parent2.copy()
     c1 = parent1[start:end]
     c2 = parent2[start:end]
-    
-    
     for i in range(half):
-        bIdx = parent2.index(c1[i])
-        parent2 = swap(parent2, i+start, bIdx)
-        aIdx = parent1.index(c2[i])
-        parent1 = swap(parent1, i+start, aIdx)
-
-    return parent1, parent2
+        bIdx = child2.index(c1[i])
+        child2 = swap(child2, i+start, bIdx)
+        aIdx = child1.index(c2[i])
+        child1 = swap(child1, i+start, aIdx)
+    return child1, child2
 
 def survivor(population, distanceOfPopulation):
     score = [1/distanceOfPopulation[i] for i in range(len(distanceOfPopulation))]
     score = [score[i]/sum(score) for i in range(len(distanceOfPopulation))]
 
-    survivor = np.random.choice(len(population), size=n, replace=False, p=score) 
+    survivor = np.random.choice(len(population), size=populationSize, replace=False, p=score) 
     survivor = [population[survivor[i]] for i in range(len(survivor))]
     return survivor
 
 with open("european_cities.csv", "r") as file:
+    
     cityNames = file.readline().split(";")
     
     List = []
@@ -52,13 +51,16 @@ with open("european_cities.csv", "r") as file:
             tempLine[i] = float(tempLine[i])
         List.append(tempLine)
 
-    routeLength = len(List) - 14
+    populationSize = 60
+    generation = 0
+    amountOfCities = len(List)
+    parentSize = populationSize//2
+
+    routeLength = amountOfCities
     randomRoute = [i for i in range(routeLength)]
-    
-    generation = 2
-    n = 60
+
     population = []
-    while len(population) < n:
+    while len(population) < populationSize:
         np.random.shuffle(randomRoute)
         if randomRoute not in population:
             population.append(randomRoute.copy())
@@ -67,31 +69,9 @@ with open("european_cities.csv", "r") as file:
     score = [1/distanceOfPopulation[i] for i in range(len(distanceOfPopulation))]
     score = [score[i]/sum(score) for i in range(len(distanceOfPopulation))]
 
-    parent = np.random.choice(len(population), size=n//2, replace=False, p=score) 
-    parent = [population[parent[i]] for i in range(len(parent))]
-
-    child = []
-    for i in range(0, len(parent), 2):
-        c1, c2 = crossover(parent[i], parent[i+1])
-        child.append(c1)
-        child.append(c2)
-
-    distanceOfChild = [search(List, child[i]) for i in range(len(child))]
-    childScore = [1/distanceOfChild[i] for i in range(len(distanceOfChild))]
-    childScore = [childScore[i]/sum(childScore) for i in range(len(child))]
-
-    for i in range(len(child)):
-        population.append(child[i])
-        distanceOfPopulation.append(distanceOfChild[i])
-
-    population = survivor(population, distanceOfPopulation)
-    distanceOfPopulation = [search(List, population[i]) for i in range(len(population))]
-    score = [1/distanceOfPopulation[i] for i in range(len(distanceOfPopulation))]
-    score = [score[i]/sum(score) for i in range(len(distanceOfPopulation))]
-
     while max(score) - min(score) > 0.001:
         generation += 1
-        parent = np.random.choice(len(population), size=n//2, replace=False, p=score) 
+        parent = np.random.choice(len(population), size=parentSize, replace=False, p=score) 
         parent = [population[parent[i]] for i in range(len(parent))]
 
         child = []
