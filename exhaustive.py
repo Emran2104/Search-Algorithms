@@ -13,13 +13,13 @@ def calculate(L, A):
     sumDistance += L[A[-1]][A[0]]
     return sumDistance
 
-with open("Search-Algorithms/european_cities.csv", "r") as file:
+with open("european_cities.csv", "r") as file:
     """
     Here we start from the first route possible, and checks all the possible routes and its distance.
     At the end compare the results and print out the best route and its distance.
     """
     start = timer()
-    nrOfCities = 6
+    nrOfCities = 10
     cityName = file.readline()
     cityName = cityName.split(";")
     citiesByIndex = np.linspace(0, nrOfCities-1, nrOfCities, dtype=int)

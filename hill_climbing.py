@@ -47,7 +47,7 @@ def execute():
                 tempLine[i] = float(tempLine[i])
             List.append(tempLine)
             
-        routeLength = len(List)
+        routeLength = len(List) - 14
         randomRoute = [i for i in range(routeLength)]
         np.random.shuffle(randomRoute)
         
