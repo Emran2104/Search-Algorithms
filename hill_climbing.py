@@ -4,12 +4,19 @@ from timeit import default_timer as timer
 
 #Given a route, finds the distance of the route
 def search(List, route):
+    """
+    Given a route, calculates the distance of the route with given List. Where List is all the distance values from each city.
+    """
     distance = 0
     for i in range(len(route)):
         distance += List[route[i-1]][route[i]]
     return distance
 
 def swap1(route):
+    """
+    Here, with given route, we can swap some of indexes with each other, and return all the routes that has been swapped. 
+    We swap some of the indexes (cities), except for the starting. (neighbours)
+    """
     Routes = [route]
     for i in range(1, len(route)-1):
         for j in range(i+1, len(route)):
@@ -21,6 +28,14 @@ def swap1(route):
     return Routes
 
 def execute():
+    """
+    This is where all the functions gets run.
+    1. We start with a random route (or previous route), and checks its distance.
+    2. We then give the best route to "swap" function, and checks its distance.
+    We then have a while loop that does 1. and 2. over and over until it can not find any better distance (local or global opimum).
+
+    Return the best route and its distance
+    """
     with open("european_cities.csv", "r") as file:
         cityNames = file.readline().split(";")
         
@@ -59,6 +74,10 @@ def execute():
     return minDis, [cityNames[minRoute[i]] for i in range(len(minRoute))]
 
 if __name__ == "__main__": 
+    """
+    Here we run the "execute" function 20 times and save all the minimum distance and print out the best route and distance from the 20 runs.
+    Also calculates the time it took to execute.
+    """
     Distance = []
     Routes = []
     start = timer()

@@ -4,6 +4,9 @@ import numpy as np
 
 
 def calculate(L, A):
+    """
+    Given a route, calculates the distance of the route with given List. Where List is all the distance values from each city.
+    """
     sumDistance = 0
     for i in range(1, len(A)):
         sumDistance += L[A[i-1]][A[i]]
@@ -11,6 +14,10 @@ def calculate(L, A):
     return sumDistance
 
 with open("Search-Algorithms/european_cities.csv", "r") as file:
+    """
+    Here we start from the first route possible, and checks all the possible routes and its distance.
+    At the end compare the results and print out the best route and its distance.
+    """
     start = timer()
     nrOfCities = 6
     cityName = file.readline()
