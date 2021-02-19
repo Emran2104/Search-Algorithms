@@ -2,7 +2,6 @@ import numpy as np
 import copy
 from timeit import default_timer as timer
 
-#Given a route, finds the distance of the route
 def search(List, route):
     """
     Given a route, calculates the distance of the route with given List. Where List is all the distance values from each city.
@@ -11,6 +10,7 @@ def search(List, route):
     for i in range(len(route)):
         distance += List[route[i-1]][route[i]]
     return distance
+
 
 def swap1(route):
     """
@@ -26,6 +26,7 @@ def swap1(route):
             tempRoute[j] = temp
             Routes.append(tempRoute)
     return Routes
+
 
 def execute():
     """
@@ -49,7 +50,6 @@ def execute():
         routeLength = len(List)
         randomRoute = [i for i in range(routeLength)]
         np.random.shuffle(randomRoute)
-
         
         distance = search(List, randomRoute)
         neighRoutes = swap1(randomRoute)
@@ -68,10 +68,8 @@ def execute():
             tempIndex = routesDistance.index(minDis)
             minRoute = neighRoutes[tempIndex]
 
-    #Best Outcome
-    #print(search(List, [4, 9, 20, 1, 5, 22, 23, 2, 17, 15, 13, 18, 0, 12, 7, 11, 16, 3, 8, 6, 21, 19, 14, 10]))
-
     return minDis, [cityNames[minRoute[i]] for i in range(len(minRoute))]
+
 
 if __name__ == "__main__": 
     """
